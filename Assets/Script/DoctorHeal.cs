@@ -1,36 +1,39 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class DoctorHeal : MonoBehaviour
 {
-    public UnityAction OnSoldierHeal;
-    public UnityAction OnSoldierFirstAid;
-
     private bool _isInTrigger;
+
+    private Soldier _soldier;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.GetComponent<Soldier>())
-            _isInTrigger = true;
+            _soldier = col.GetComponent<Soldier>();
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.GetComponent<Soldier>())
-            _isInTrigger = false;
+            _soldier = null;
     }
 
     private void Update()
     {
-        if (_isInTrigger)
-        {
+        Heal();
+    }
+
+    private void Heal()
+    {
+        if (_soldier != null)
             if (Input.GetKey(KeyCode.F))
-                OnSoldierHeal?.Invoke();
+                _soldier.Heal();
             else if (Input.GetKeyUp(KeyCode.F))
-                OnSoldierFirstAid?.Invoke();
-        }
+                _soldier.FirstAid();
     }
 }
