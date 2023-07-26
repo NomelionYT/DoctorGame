@@ -21,6 +21,7 @@ public class DoctorScore : MonoBehaviour
 
     public void RemoveScore()
     {
-        _score--;
+        if (_score > 0)
+            _score--;
     }
 }
