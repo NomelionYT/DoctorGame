@@ -34,7 +34,7 @@ public class SoldierSpawner : MonoBehaviour
             soldier.GetComponent<Soldier>().SetBed(soldierBed);
             soldierBed.SoldierSettling(soldier.GetComponent<Soldier>());
             freeBeds.Remove(soldierBed);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(5f);
         }
         
         while (freeBeds.Count < 1)

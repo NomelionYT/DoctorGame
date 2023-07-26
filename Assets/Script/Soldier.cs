@@ -17,7 +17,6 @@ public class Soldier : MonoBehaviour
     [SerializeField] private Image _injuryImage;
 
     [SerializeField] private MedicalBed _soldierBed;
-    private DoctorHeal _doctorHeal;
     private DoctorScore _doctorScore;
     private IEnumerator _dyingCoroutine;
     private bool _canHeal = true;
@@ -27,20 +26,7 @@ public class Soldier : MonoBehaviour
 
     private void Awake()
     {
-        _doctorHeal = FindObjectOfType<DoctorHeal>();
         _doctorScore = FindObjectOfType<DoctorScore>();
-    }
-
-    private void OnEnable()
-    {
-        _doctorHeal.OnSoldierHeal += Heal;
-        _doctorHeal.OnSoldierFirstAid += FirstAid;
-    }
-
-    private void OnDisable()
-    {
-        _doctorHeal.OnSoldierHeal -= Heal;
-        _doctorHeal.OnSoldierFirstAid -= FirstAid;
     }
 
     private void Start()
@@ -73,7 +59,7 @@ public class Soldier : MonoBehaviour
         _hpText.text = _hp.ToString();
     }
 
-    private void Heal()
+    public void Heal()
     {
         if (_hp < 100)
             StartCoroutine(HealCoroutine());
