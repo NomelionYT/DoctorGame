@@ -128,9 +128,9 @@ public class Soldier : MonoBehaviour
             _speedOfDying = 1f;
             _injuryImage.color = Color.green;
             StopCoroutine(_dyingCoroutine);
-            _dyingCoroutine = DyingCoroutine(_speedOfDying);
-            StartCoroutine(_dyingCoroutine);
         }
+        _dyingCoroutine = DyingCoroutine(_speedOfDying);
+        StartCoroutine(_dyingCoroutine);
         _canHeal = true;
         SetHealVFX(false);
     }
