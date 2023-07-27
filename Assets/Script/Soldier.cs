@@ -73,11 +73,12 @@ public class Soldier : MonoBehaviour
 
     public void Heal()
     {
-        _wasHealed = true;
-        
         if (_healVFXInstantiate == null)
+        {
             SetHealVFX(true);
-
+            _wasHealed = true;
+        }
+        
         if (_hp < 100)
         {
             if (_currentCoroutine == null) //мой самый простой, гениальный и полезный bugfix
