@@ -27,6 +27,7 @@ public class Soldier : MonoBehaviour
     private Injuries _injury;
     private int _hp;
     private float _speedOfDying;
+    private Coroutine _currentCoroutine;
 
     private void Awake()
     {
@@ -68,9 +69,12 @@ public class Soldier : MonoBehaviour
     {
         if (_healVFXInstantiate == null)
             SetHealVFX(true);
-        
+
         if (_hp < 100)
-            StartCoroutine(HealCoroutine());
+        {
+            if (_currentCoroutine == null) //мой самый простой, гениальный и полезный bugfix
+                _currentCoroutine = StartCoroutine(HealCoroutine());
+        }
         else
             RemoveSoldier(true);
     }
@@ -137,12 +141,13 @@ public class Soldier : MonoBehaviour
     {
         if (_canHeal)
         {
-            StopCoroutine(_dyingCoroutine);
             _canHeal = false;
+            StopCoroutine(_dyingCoroutine);
             _hp++;
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.20f);
             _canHeal = true;
         }
-        yield return null;
+
+        _currentCoroutine = null;
     }
 }
