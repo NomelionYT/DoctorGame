@@ -23,11 +23,17 @@ public class Soldier : MonoBehaviour
     private MedicalBed _soldierBed;
     private DoctorScore _doctorScore;
     private IEnumerator _dyingCoroutine;
-    private bool _canHeal = true;
     private Injuries _injury;
+    private bool _canHeal = true;
+    private bool _wasHealed = false;
     private int _hp;
     private float _speedOfDying;
-    private Coroutine _currentCoroutine;
+
+    public bool WasHealed
+    {
+        get => _wasHealed;
+        private set { }
+    }
 
     private void Awake()
     {
@@ -67,6 +73,8 @@ public class Soldier : MonoBehaviour
 
     public void Heal()
     {
+        _wasHealed = true;
+        
         if (_healVFXInstantiate == null)
             SetHealVFX(true);
 

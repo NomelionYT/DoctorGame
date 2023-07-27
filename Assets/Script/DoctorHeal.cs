@@ -21,7 +21,8 @@ public class DoctorHeal : MonoBehaviour
     {
         if (other.GetComponent<Soldier>())
         {
-            _soldier.FirstAid();
+            if (_soldier.WasHealed)
+                _soldier.FirstAid();
             _soldier = null;
         }
     }
