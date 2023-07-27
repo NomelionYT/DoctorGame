@@ -12,23 +12,25 @@ public enum Injuries
     Hard
 }
 
-[RequireComponent(typeof(BoxCollider2D))]
 public class Soldier : MonoBehaviour
 {
     [SerializeField] private TMPro.TMP_Text _hpText;
     [SerializeField] private Image _injuryImage;
     [SerializeField] private GameObject _healVFXPrefab;
+    [SerializeField] private Canvas _canvas;
 
     private Animator _animator;
     private GameObject _healVFXInstantiate;
     private MedicalBed _soldierBed;
     private DoctorScore _doctorScore;
     private IEnumerator _dyingCoroutine;
-    private Coroutine _currentCoroutine;
     private Vector3 _VFXOffset;
     private Injuries _injury;
+    private bool _isHealCoroutineActive;
+    private bool _isDyingCoroutineActive;
     private bool _canHeal = true;
     private bool _wasHealed = false;
+    private bool _isInHospital = true;
     private int _hp;
     private float _speedOfDying;
 
@@ -68,11 +70,18 @@ public class Soldier : MonoBehaviour
         
         _dyingCoroutine = DyingCoroutine(_speedOfDying);
         StartCoroutine(_dyingCoroutine);
+        _isDyingCoroutineActive = true;
     }
 
     private void Update()
     {
         _hpText.text = _hp.ToString();
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.CompareTag("Exit"))
+            _isInHospital = false;
     }
 
     public void Heal()
@@ -85,8 +94,11 @@ public class Soldier : MonoBehaviour
         
         if (_hp < 100)
         {
-            if (_currentCoroutine == null) //мой самый простой, гениальный и полезный bugfix
-                _currentCoroutine = StartCoroutine(HealCoroutine());
+            if (_isHealCoroutineActive == false)
+            {
+                StartCoroutine(HealCoroutine());
+                _isHealCoroutineActive = true;
+            }
         }
         else
             RemoveSoldier(true);
@@ -94,14 +106,22 @@ public class Soldier : MonoBehaviour
 
     private void RemoveSoldier(bool isAddScore)
     {
-        if (isAddScore)
-            _doctorScore.AddScore();
-        else
-            _doctorScore.RemoveScore();
-        _soldierBed.RemoveSoldier();
-        _soldierBed = null;
         GetComponent<BoxCollider2D>().isTrigger = false;
-        _animator.SetBool("IsWalk", true);
+        _canvas.enabled = false;
+        StopAllCoroutines();
+        if (_soldierBed != null)
+            _soldierBed.RemoveSoldier();
+        _soldierBed = null;
+        if (isAddScore)
+        {
+            _doctorScore.AddScore();
+            Leaving();
+        }
+        else
+        {
+            _doctorScore.RemoveScore();
+            Destroy(gameObject);
+        }
     }
 
     private void SetHealVFX(bool state)
@@ -123,6 +143,12 @@ public class Soldier : MonoBehaviour
         }
     }
 
+    private void Leaving()
+    {
+        _animator.SetBool("IsWalk", true);
+        //StartCoroutine(MoveCoroutine(new Vector3(0, 10, 0), 5f));
+    }
+    
     public void SetBed(MedicalBed bed)
     {
         _soldierBed = bed;
@@ -136,13 +162,29 @@ public class Soldier : MonoBehaviour
             _speedOfDying = 1f;
             _injuryImage.color = Color.green;
             StopCoroutine(_dyingCoroutine);
+            _isDyingCoroutineActive = false;
         }
-        _dyingCoroutine = DyingCoroutine(_speedOfDying);
-        StartCoroutine(_dyingCoroutine);
+
+        if (!_isDyingCoroutineActive)
+        {
+            _dyingCoroutine = DyingCoroutine(_speedOfDying);
+            StartCoroutine(_dyingCoroutine);
+            _isDyingCoroutineActive = true;
+        }
         _canHeal = true;
         SetHealVFX(false);
     }
 
+    IEnumerator MoveCoroutine(Vector3 targetPos, float speed)
+    {
+        while (_isInHospital)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+        }
+        Destroy(gameObject);
+        yield return null;
+    }
+    
     IEnumerator DyingCoroutine(float speedOfDying)
     {
         while (_hp > 0)
@@ -160,11 +202,12 @@ public class Soldier : MonoBehaviour
         {
             _canHeal = false;
             StopCoroutine(_dyingCoroutine);
+            _isDyingCoroutineActive = false;
             _hp++;
             yield return new WaitForSeconds(0.20f);
             _canHeal = true;
         }
 
-        _currentCoroutine = null;
+        _isHealCoroutineActive = false;
     }
 }
