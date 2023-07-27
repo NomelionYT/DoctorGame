@@ -20,7 +20,11 @@ public class DoctorHeal : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.GetComponent<Soldier>())
+        {
+            if (_soldier.WasHealed)
+                _soldier.FirstAid();
             _soldier = null;
+        }
     }
 
     private void Update()
