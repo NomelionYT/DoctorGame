@@ -31,6 +31,7 @@ public class Soldier : MonoBehaviour
     private bool _canHeal = true;
     private bool _wasHealed = false;
     private bool _isInHospital = true;
+    private bool _isInBed = true;
     private int _hp;
     private float _speedOfDying;
 
@@ -71,6 +72,7 @@ public class Soldier : MonoBehaviour
         _dyingCoroutine = DyingCoroutine(_speedOfDying);
         StartCoroutine(_dyingCoroutine);
         _isDyingCoroutineActive = true;
+        _isInBed = true;
     }
 
     private void Update()
@@ -101,7 +103,13 @@ public class Soldier : MonoBehaviour
             }
         }
         else
-            RemoveSoldier(true);
+        {
+            if (_isInBed)
+            {
+                _isInBed = false;
+                RemoveSoldier(true);
+            }
+        }
     }
 
     private void RemoveSoldier(bool isAddScore)
@@ -126,7 +134,6 @@ public class Soldier : MonoBehaviour
 
     private void SetHealVFX(bool state)
     {
-        //тут немного поясню
         if (state)
         {
             Destroy(_healVFXInstantiate); //удаляем старый объект VKX
@@ -146,7 +153,7 @@ public class Soldier : MonoBehaviour
     private void Leaving()
     {
         _animator.SetBool("IsWalk", true);
-        //StartCoroutine(MoveCoroutine(new Vector3(0, 10, 0), 5f));
+        StartCoroutine(MoveCoroutine(new Vector3(0, 10, 0), 10f));
     }
     
     public void SetBed(MedicalBed bed)
@@ -180,9 +187,9 @@ public class Soldier : MonoBehaviour
         while (_isInHospital)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+            yield return new WaitForSeconds(0.01f); //дабы не зависало
         }
         Destroy(gameObject);
-        yield return null;
     }
     
     IEnumerator DyingCoroutine(float speedOfDying)
