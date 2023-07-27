@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Security.Cryptography;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,8 +16,11 @@ public class Soldier : MonoBehaviour
 {
     [SerializeField] private TMPro.TMP_Text _hpText;
     [SerializeField] private Image _injuryImage;
+    [SerializeField] private GameObject _healVFXPrefab;
 
-    [SerializeField] private MedicalBed _soldierBed;
+    private Vector3 _VFXOffset;
+    private GameObject _healVFXInstantiate;
+    private MedicalBed _soldierBed;
     private DoctorScore _doctorScore;
     private IEnumerator _dyingCoroutine;
     private bool _canHeal = true;
@@ -31,6 +35,7 @@ public class Soldier : MonoBehaviour
 
     private void Start()
     {
+        _VFXOffset = new Vector3(0, 0.4f, 0);
         _hp = UnityEngine.Random.Range(70, 85);
         var injuries = Enum.GetValues(typeof(Injuries));
         var injury = injuries.GetValue(UnityEngine.Random.Range(0, injuries.Length));
@@ -61,12 +66,13 @@ public class Soldier : MonoBehaviour
 
     public void Heal()
     {
+        if (_healVFXInstantiate == null)
+            SetHealVFX(true);
+        
         if (_hp < 100)
             StartCoroutine(HealCoroutine());
         else
-        {
             RemoveSoldier(true);
-        }
     }
 
     private void RemoveSoldier(bool isAddScore)
@@ -80,6 +86,22 @@ public class Soldier : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void SetHealVFX(bool state)
+    {
+        //тут немного поясню
+        if (state)
+        {
+            Destroy(_healVFXInstantiate); //удаляем старый объект VKX
+            _healVFXInstantiate = Instantiate(_healVFXPrefab, gameObject.transform); //создаём новый объект VFX
+            _healVFXInstantiate.transform.position -= _VFXOffset; //немного корректируем позицию VFX (для красоты)
+        }
+        else
+        {
+            _healVFXInstantiate.GetComponent<ParticleSystem>().Stop(); //стопаем VFX вместо того, чтобы удалять объект (что б не было "багов" и было красиво)
+            _healVFXInstantiate = null; //делаем объект VFX null, чтобы можно было создать новый
+        }
+    }
+
     public void SetBed(MedicalBed bed)
     {
         _soldierBed = bed;
@@ -87,13 +109,17 @@ public class Soldier : MonoBehaviour
 
     public void FirstAid()
     {
-        _injury = Injuries.Easy;
-        _speedOfDying = 1f;
-        _injuryImage.color = Color.green;
-        StopCoroutine(_dyingCoroutine);
-        _dyingCoroutine = DyingCoroutine(_speedOfDying);
-        StartCoroutine(_dyingCoroutine);
+        if (_injury != Injuries.Easy)
+        {
+            _injury = Injuries.Easy;
+            _speedOfDying = 1f;
+            _injuryImage.color = Color.green;
+            StopCoroutine(_dyingCoroutine);
+            _dyingCoroutine = DyingCoroutine(_speedOfDying);
+            StartCoroutine(_dyingCoroutine);
+        }
         _canHeal = true;
+        SetHealVFX(false);
     }
 
     IEnumerator DyingCoroutine(float speedOfDying)

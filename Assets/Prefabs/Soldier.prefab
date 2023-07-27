@@ -371,7 +371,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0, g: 1, b: 0.10866976, a: 1}
   m_FlipX: 0
@@ -397,6 +397,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hpText: {fileID: 4749363256452215456}
   _injuryImage: {fileID: 4749363256154940957}
+  _healVFXPrefab: {fileID: 5271481334613464231, guid: 07e999981d08d6046b20e949e88e3e95, type: 3}
 --- !u!58 &4749363256523314960
 CircleCollider2D:
   m_ObjectHideFlags: 0

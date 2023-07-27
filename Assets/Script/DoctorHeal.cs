@@ -26,7 +26,6 @@ public class DoctorHeal : MonoBehaviour
     private void Update()
     {
         Heal();
-        //dsadasdaasd
     }
 
     private void Heal()

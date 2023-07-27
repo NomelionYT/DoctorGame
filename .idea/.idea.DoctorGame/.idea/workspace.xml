@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a41b494e-2cef-4607-a03f-95f8083817ae" name="Changes" comment="" />
+    <list default="true" id="53e9b840-c5a6-40f1-aaa8-f97f7b14e46f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DoctorGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DoctorGame/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Soldier.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Soldier.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/DoctorHeal.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/DoctorHeal.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Soldier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Soldier.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,15 +21,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Discover.Launch.Via.Unity": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Discover.Launch.Via.Unity&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="UnitTests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="D:\UnityEditors\2021.3.16f1\Editor\Unity.exe" />
@@ -57,12 +63,13 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="a41b494e-2cef-4607-a03f-95f8083817ae" name="Changes" comment="" />
+      <changelist id="53e9b840-c5a6-40f1-aaa8-f97f7b14e46f" name="Changes" comment="" />
       <created>1690377810626</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1690377810626</updated>
       <workItem from="1690377825259" duration="1625000" />
+      <workItem from="1690455123394" duration="2328000" />
     </task>
     <servers />
   </component>
