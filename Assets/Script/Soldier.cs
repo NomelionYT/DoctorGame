@@ -12,17 +12,20 @@ public enum Injuries
     Hard
 }
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class Soldier : MonoBehaviour
 {
     [SerializeField] private TMPro.TMP_Text _hpText;
     [SerializeField] private Image _injuryImage;
     [SerializeField] private GameObject _healVFXPrefab;
 
-    private Vector3 _VFXOffset;
+    private Animator _animator;
     private GameObject _healVFXInstantiate;
     private MedicalBed _soldierBed;
     private DoctorScore _doctorScore;
     private IEnumerator _dyingCoroutine;
+    private Coroutine _currentCoroutine;
+    private Vector3 _VFXOffset;
     private Injuries _injury;
     private bool _canHeal = true;
     private bool _wasHealed = false;
@@ -42,6 +45,7 @@ public class Soldier : MonoBehaviour
 
     private void Start()
     {
+        _animator = GetComponent<Animator>();
         _VFXOffset = new Vector3(0, 0.4f, 0);
         _hp = UnityEngine.Random.Range(70, 85);
         var injuries = Enum.GetValues(typeof(Injuries));
@@ -96,7 +100,8 @@ public class Soldier : MonoBehaviour
             _doctorScore.RemoveScore();
         _soldierBed.RemoveSoldier();
         _soldierBed = null;
-        Destroy(gameObject);
+        GetComponent<BoxCollider2D>().isTrigger = false;
+        _animator.SetBool("IsWalk", true);
     }
 
     private void SetHealVFX(bool state)
@@ -110,8 +115,11 @@ public class Soldier : MonoBehaviour
         }
         else
         {
-            _healVFXInstantiate.GetComponent<ParticleSystem>().Stop(); //стопаем VFX вместо того, чтобы удалять объект (что б не было "багов" и было красиво)
-            _healVFXInstantiate = null; //делаем объект VFX null, чтобы можно было создать новый
+            if (_healVFXInstantiate != null)
+            {
+                _healVFXInstantiate.GetComponent<ParticleSystem>().Stop(); //стопаем VFX вместо того, чтобы удалять объект (что б не было "багов" и было красиво)
+                _healVFXInstantiate = null; //делаем объект VFX null, чтобы можно было создать новый
+            }
         }
     }
 
